@@ -26,7 +26,7 @@ function setTokens(res, accessToken, refreshToken) {
 }
 
 router.post(
-  '/auth/register',
+  '/register',
   asyncHandler(async (req, res) => {
     const { name, email, password, goal, targetPackage, startDate } = req.body;
     if (!name || !email || !password) throw new AppError('Name, email and password required', 400);
@@ -70,7 +70,7 @@ router.post(
 );
 
 router.post(
-  '/auth/login',
+  '/login',
   asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) throw new AppError('Email and password required', 400);
@@ -125,7 +125,7 @@ router.post(
 );
 
 router.post(
-  '/auth/logout',
+  '/logout',
   protect,
   asyncHandler(async (req, res) => {
     const token = req.body.refreshToken || req.cookies?.refreshToken;

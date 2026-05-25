@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
+import { corsOptions } from './config/cors.js';
 
 import authRoutes from './routes/auth.routes.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
@@ -19,13 +20,15 @@ import readinessRoutes from './routes/readiness.routes.js';
 
 const app = express();
 
-const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+const corsConfig = corsOptions();
 
-app.use(helmet());
+// CORS before other middleware so preflight (OPTIONS) always gets headers
+app.use(cors(corsConfig));
+app.options('*', cors(corsConfig));
+
 app.use(
-  cors({
-    origin: clientUrl.split(',').map((u) => u.trim()),
-    credentials: true,
+  helmet({
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
   })
 );
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
@@ -36,7 +39,12 @@ const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 500 });
 app.use('/api', limiter);
 
 app.get('/api/health', (_req, res) => {
-  res.json({ success: true, service: 'placement-sprint-api', timestamp: new Date() });
+  res.json({
+    success: true,
+    service: 'placement-sprint-api',
+    timestamp: new Date(),
+    cors: process.env.CLIENT_URL ? 'configured' : 'CLIENT_URL missing',
+  });
 });
 
 app.use('/api/auth', authRoutes);

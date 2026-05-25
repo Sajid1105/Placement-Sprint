@@ -16,6 +16,8 @@ services:
       - key: JWT_REFRESH_SECRET
         generateValue: true
       - key: CLIENT_URL
+        value: https://placementsprint.vercel.app
+      - key: ALLOWED_ORIGINS
         sync: false
       - key: SPRINT_START_DATE
         value: 2025-06-01

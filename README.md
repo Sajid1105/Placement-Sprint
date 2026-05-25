@@ -103,12 +103,16 @@ cd backend && npm run seed && npm run dev
 
 1. Connect repo, use `render.yaml` or set root `backend`
 2. Build: `npm install` · Start: `npm start`
-3. Env vars: `MONGODB_URI`, `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, `CLIENT_URL` (Vercel URL)
+3. Env vars on Render:
+   - `MONGODB_URI` — Atlas connection string
+   - `JWT_ACCESS_SECRET` / `JWT_REFRESH_SECRET` — 32+ char secrets
+   - `CLIENT_URL` — **`https://placementsprint.vercel.app`** (no trailing slash; comma-separate multiple origins if needed)
+   - `NODE_ENV` — `production`
 
 ### Frontend — Vercel
 
 1. Import repo, set root directory `frontend`
-2. Env: `VITE_API_URL=https://your-api.onrender.com/api`
+2. Env on Vercel: `VITE_API_URL=https://placement-sprint.onrender.com/api` (must include `/api`, no trailing slash after)
 3. Deploy
 
 ## API overview
